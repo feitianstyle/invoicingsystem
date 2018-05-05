@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为IUserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.feitian.dao.UserMapper">
+    <resultMap id="myResult" type="com.feitian.model.User">
+        <id property="id" column="id"/>
+        <result property="userName" column="username"/>
+        <result property="passWord" column="password"/>
+    </resultMap>
+    <select id="countById" resultType="int" >
+        SELECT count(*) FROM users
+    </select>
+    <select id="getUserById" resultMap="myResult" parameterType="int">
+      select * from users where id = #{id}
+    </select>
+    <select id="getUserByName" resultMap="myResult" parameterType="String">
+        select * from users u where u.username = #{userName}
+    </select>
+    <select id="getUserByAll" resultMap="myResult" parameterType="String">
+        select  * from users u where u.username = #{userName} and u.password = #{passWord}
+    </select>
+</mapper>

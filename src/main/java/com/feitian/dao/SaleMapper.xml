@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.feitian.dao.SaleMapper">
+
+
+    <insert id="save" parameterType="Sale" >
+      insert into sale (id,price,quantity,totalprice,saledate,userid,productid) values
+        (null ,#{sale.price},#{sale.quantity},#{sale.totalPrice},#{sale.saleDate},#{sale.userId},#{sale.productId});
+      <selectKey resultType="java.lang.Integer" keyProperty="id">
+          SELECT @@IDENTITY AS ID
+      </selectKey>
+    </insert>
+
+    <select id="getCount" resultType="int">
+        select count(*) from sale
+    </select>
+
+    <select id="findByPage" resultType="com.feitian.model.SaleInfo" parameterType="com.feitian.model.PageInfo">
+        select s.id as id,p.productname as productName,s.price as price,s.quantity as quantity,s.totalprice as totalPrice,DATE_FORMAT(s.saledate,'%Y-%c-%d') as saleDate,u.username as saleName
+        from sale s join users u on s.userid = u.id join product p on s.productid = p.id order by
+        <if test="pageInfo.beginIndex !=null and pageInfo.everyPage != null ">
+          ${sort} desc  limit  #{pageInfo.beginIndex} , #{pageInfo.everyPage}
+        </if>
+    </select>
+</mapper>
